@@ -6,7 +6,8 @@ Plain HTML/CSS/JS static site. No build step — open `index.html` in a browser 
 index.html          Home
 classes.html        Schedule, fees, what to bring
 kids.html           Kids program
-about.html          History, philosophy, instructors
+about.html          History, philosophy
+instructors.html    Instructor bios
 what-is-judo.html   Intro to judo
 faq.html            Full FAQ
 contact.html        Contact
