@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeLeon Judo Club — Judo in Petaluma, CA since 1970</title>
+  <meta name="description" content="DeLeon Judo Club is a non-profit judo dojo in Petaluma, California. Classes for kids and adults ages 6 and up. Register through Petaluma Parks & Recreation.">
+  <link rel="icon" href="public/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="public/logo.svg" alt="DeLeon Judo Club logo">
+      <span>DeLeon Judo Club<small>Petaluma, CA · Est. 1970</small></span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="classes.html">Classes</a></li>
+        <li><a href="kids.html">Kids</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="what-is-judo.html">What Is Judo?</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a class="nav-cta" data-register href="https://secure.rec1.com/CA/petaluma-ca/catalog">Register</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Non-profit judo dojo · Petaluma, California</p>
+        <h1>Judo for kids and adults, taught the traditional way since 1970.</h1>
+        <p class="lead">DeLeon Judo Club has been part of the Petaluma community for over 50 years. We teach the "Gentle Way" — balance, leverage, discipline, and respect — to students ages 6 and up.</p>
+        <div class="actions">
+          <a class="btn" data-register href="https://secure.rec1.com/CA/petaluma-ca/catalog">Register via Parks &amp; Rec</a>
+          <a class="btn btn-outline" href="classes.html">See the schedule</a>
+        </div>
+      </div>
+      <img class="hero-logo" src="public/logo.svg" alt="">
+    </div>
+  </div>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="grid grid-2" style="align-items:center">
+        <div class="prose">
+          <h2>Welcome to the dojo</h2>
+          <p>DeLeon Judo Club was founded in January 1970 by Jim Santiago DeLeon and has been led by <strong>Sensei Henry Kaku</strong> (Godan, 5th Dan) since 2007. We are a volunteer-run, non-profit club that trains at the Kenilworth Teen Center on the Petaluma fairgrounds.</p>
+          <p>Our goal is simple: to give students not only the physical skills of judo, but its philosophy and traditions. We introduce judo as a lifetime pursuit — an art that can always be refined — in a dojo that is a place of stability and community.</p>
+          <p><a href="about.html">Meet our instructors →</a></p>
+        </div>
+        <div class="card">
+          <h3>How to join</h3>
+          <ol class="prose" style="padding-left:1.2rem;margin:0">
+            <li>Come watch or try a Tuesday or Thursday 5:30 pm class — no experience needed.</li>
+            <li>Register and pay the monthly rate through <strong>Petaluma Parks &amp; Recreation</strong> (search "Judo"). Family discounts available.</li>
+            <li>Show up in comfortable athletic clothes. We'll help you get a gi when you're ready.</li>
+          </ol>
+          <p style="margin:1rem 0 0"><a class="btn" data-register href="https://secure.rec1.com/CA/petaluma-ca/catalog">Go to registration</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Class schedule</h2>
+        <p>All classes at Kenilworth Teen Center, 150 Fairgrounds Drive, Petaluma.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="schedule">
+          <thead><tr><th>Day</th><th>Time</th><th>Who</th></tr></thead>
+          <tbody data-schedule></tbody>
+        </table>
+      </div>
+      <p style="margin-top:1rem"><a href="classes.html">Class details →</a> &nbsp;·&nbsp; <a href="kids.html">Kids program →</a></p>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="grid grid-2" style="align-items:center">
+        <blockquote class="quote">
+          Judo is the way to the most efficient use of both physical and mental energy. Through training in the attack and defense techniques of judo, the practitioner nurtures their physical and mental strength, and gradually embodies the essence of the Way of Judo.
+          <cite>— Dr. Jigoro Kano, founder of Judo</cite>
+        </blockquote>
+        <div class="prose">
+          <h2>The Gentle Way</h2>
+          <p>Judo uses leverage, balance, movement, and your opponent's own strength. Its two guiding principles — <strong>Maximum Efficiency</strong> and <strong>Mutual Welfare and Benefit</strong> — are as much about how you live as how you throw.</p>
+          <p><a href="what-is-judo.html">Learn what judo is →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" data-limit="4"></section>
+  <section id="contact" class="dark"></section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>© <span data-year>2026</span> DeLeon Judo Club · A non-profit organization · Petaluma, CA</div>
+    <ul>
+      <li><a href="classes.html">Classes</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
