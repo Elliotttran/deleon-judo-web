@@ -105,18 +105,28 @@ small { color: var(--muted); }
   left: var(--x); top: var(--y); width: var(--w);
   aspect-ratio: var(--ar, 4 / 3);
   margin: 0;
+  border: 6px solid #fff;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 14px 28px -10px rgba(20,15,10,0.32);
   opacity: 0;
-  transform: translateY(22px) scale(0.965);
-  transition: opacity 0.9s ease, transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform: rotate(var(--rot, 0deg)) translateY(26px) scale(0.94);
+  transition: opacity 0.9s ease, transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.9s ease;
   transition-delay: calc(var(--i) * 130ms);
   will-change: opacity, transform;
 }
-.hero-photo img { width: 100%; height: 100%; object-fit: cover; }
-.hero-photos.is-in .hero-photo { opacity: 1; transform: none; }
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-photos.is-in .hero-photo { opacity: 1; transform: rotate(var(--rot, 0deg)); }
+.hero-photos.is-in .hero-photo:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 20px 34px -12px rgba(20,15,10,0.4);
+  z-index: 3;
+}
 .hero-photos.is-out .hero-photo {
   opacity: 0;
-  transform: translateY(-16px) scale(0.985);
-  transition-duration: 0.6s, 0.7s;
+  transform: rotate(var(--rot, 0deg)) translateY(-14px) scale(0.965);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 8px 16px -10px rgba(20,15,10,0.18);
+  transition-duration: 0.6s, 0.7s, 0.6s;
   transition-delay: calc(var(--i) * 60ms);
 }
 @media (min-width: 760px) {
@@ -130,8 +140,8 @@ small { color: var(--muted); }
   .hero-photos, .hero-veil { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo { transition: opacity 0.5s ease; transition-delay: 0s; transform: none; }
-  .hero-photos.is-out .hero-photo { transform: none; }
+  .hero-photo { transition: opacity 0.5s ease; transition-delay: 0s; transform: rotate(var(--rot, 0deg)); }
+  .hero-photos.is-out .hero-photo { transform: rotate(var(--rot, 0deg)); }
 }
 
 /* Page header (interior pages) — same impact, one notch smaller */

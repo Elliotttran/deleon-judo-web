@@ -301,16 +301,16 @@
   // clear of the centre column where the copy sits. Mix left and right slots
   // in every group so both sides fill.
   var HERO_SLOTS = {
-    L1: { x: 4,  y: 9,  w: 13,   ar: "4/3" },
-    L2: { x: 17, y: 14, w: 9,    ar: "3/4" },
-    L3: { x: 3,  y: 44, w: 10,   ar: "4/3" },
-    L4: { x: 10, y: 60, w: 10.5, ar: "3/4" },
-    L5: { x: 4,  y: 80, w: 11,   ar: "4/3" },
-    R1: { x: 79, y: 8,  w: 14,   ar: "4/3" },
-    R2: { x: 71, y: 24, w: 10,   ar: "4/3" },
-    R3: { x: 86, y: 46, w: 9.5,  ar: "3/4" },
-    R4: { x: 79, y: 64, w: 12,   ar: "4/3" },
-    R5: { x: 72, y: 81, w: 9,    ar: "1/1" }
+    L1: { x: 4,  y: 9,  w: 13,   ar: "4/3", rot: -4 },
+    L2: { x: 17, y: 14, w: 9,    ar: "3/4", rot: 5 },
+    L3: { x: 3,  y: 44, w: 10,   ar: "4/3", rot: 3 },
+    L4: { x: 10, y: 60, w: 10.5, ar: "3/4", rot: -5 },
+    L5: { x: 4,  y: 80, w: 11,   ar: "4/3", rot: 4 },
+    R1: { x: 79, y: 8,  w: 14,   ar: "4/3", rot: 4 },
+    R2: { x: 71, y: 24, w: 10,   ar: "4/3", rot: -3 },
+    R3: { x: 86, y: 46, w: 9.5,  ar: "3/4", rot: -5 },
+    R4: { x: 79, y: 64, w: 12,   ar: "4/3", rot: 5 },
+    R5: { x: 72, y: 81, w: 9,    ar: "1/1", rot: -4 }
   };
   var HERO_GROUPS = [
     [["05", "L1"], ["17", "R2"], ["14", "L4"], ["21", "R4"], ["16", "L2"]],
@@ -340,7 +340,7 @@
       heroPhotos.innerHTML = group.map(function (p, i) {
         var s = HERO_SLOTS[p[1]];
         return '<figure class="hero-photo" style="--x:' + s.x + '%;--y:' + s.y + '%;--w:' + s.w +
-               '%;--ar:' + s.ar + ';--i:' + i + '"><img src="' + heroSrc(p) + '" alt="" decoding="async"></figure>';
+               '%;--ar:' + s.ar + ';--i:' + i + ';--rot:' + s.rot + 'deg"><img src="' + heroSrc(p) + '" alt="" decoding="async"></figure>';
       }).join("");
       // Two frames so the initial hidden state is painted before transitioning in.
       requestAnimationFrame(function () {
