@@ -293,80 +293,31 @@
     el.innerHTML = "<p>" + CLUB.nonprofit.blurb + "</p>";
   });
 
-  // ---------- Hero photo clusters (edit here) ----------
-  // Groups of photos from public/hero/ cycle behind the home-page headline: a
-  // group fades in one photo at a time, holds, fades out, and the next takes
-  // its place. Each photo names a slot; slots are positions in the hero box as
-  // percentages (x/y = top-left corner, w = width, ar = aspect ratio) and stay
-  // clear of the centre column where the copy sits. Mix left and right slots
-  // in every group so both sides fill.
-  var HERO_SLOTS = {
-    L1: { x: 4,  y: 9,  w: 13,   ar: "4/3" },
-    L2: { x: 17, y: 14, w: 9,    ar: "3/4" },
-    L3: { x: 3,  y: 44, w: 10,   ar: "4/3" },
-    L4: { x: 10, y: 60, w: 10.5, ar: "3/4" },
-    L5: { x: 4,  y: 80, w: 11,   ar: "4/3" },
-    R1: { x: 79, y: 8,  w: 14,   ar: "4/3" },
-    R2: { x: 71, y: 24, w: 10,   ar: "4/3" },
-    R3: { x: 86, y: 46, w: 9.5,  ar: "3/4" },
-    R4: { x: 79, y: 64, w: 12,   ar: "4/3" },
-    R5: { x: 72, y: 81, w: 9,    ar: "1/1" }
-  };
-  var HERO_GROUPS = [
-    [["05", "L1"], ["17", "R2"], ["14", "L4"], ["21", "R4"], ["16", "L2"]],
-    [["09", "R1"], ["07", "L1"], ["10", "L3"], ["13", "R3"], ["22", "L5"], ["03", "R4"]],
-    [["01", "L2"], ["12", "R1"], ["06", "L5"], ["11", "R2"], ["18", "L3"], ["15", "R3"]],
-    [["19", "R1"], ["08", "L3"], ["04", "R4"], ["20", "L1"], ["02", "R5"], ["03", "L4"]]
+  // ---------- Hero photo lanes (edit here) ----------
+  // Vertical lanes of club photos drift upward behind the home-page headline,
+  // like a slow stream. Each lane sits in the left/right gutters (x/w as % of
+  // the hero box, clear of the centre column) and loops its own photo list
+  // forever via a pure-CSS animation — the list is duplicated so the loop is
+  // seamless. Different durations/delays per lane keep the lanes from moving
+  // in lockstep.
+  var HERO_LANES = [
+    { x: 3,  w: 13, ar: "4/3", duration: 34, delay: -6,  photos: ["05", "17", "14", "21", "16"] },
+    { x: 18, w: 9,  ar: "3/4", duration: 44, delay: -18, photos: ["09", "07", "10", "13"] },
+    { x: 73, w: 9,  ar: "3/4", duration: 40, delay: -10, photos: ["01", "12", "06", "11"] },
+    { x: 84, w: 11, ar: "4/3", duration: 30, delay: -22, photos: ["19", "08", "04", "20", "03"] }
   ];
-  var HERO_TIMING = { hold: 4200, exit: 800, gap: 250 };
 
   var heroPhotos = $("[data-hero-photos]");
-  if (heroPhotos && HERO_GROUPS.length) {
-    var heroSrc = function (p) { return "public/hero/" + p[0] + ".jpg"; };
-    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    var preloadGroup = function (group) {
-      return Promise.all(group.map(function (p) {
-        return new Promise(function (resolve) {
-          var img = new Image();
-          img.onload = img.onerror = resolve;
-          img.src = heroSrc(p);
-        });
-      }));
-    };
-
-    var renderGroup = function (group) {
-      heroPhotos.className = "hero-photos";
-      heroPhotos.innerHTML = group.map(function (p, i) {
-        var s = HERO_SLOTS[p[1]];
-        return '<figure class="hero-photo" style="--x:' + s.x + '%;--y:' + s.y + '%;--w:' + s.w +
-               '%;--ar:' + s.ar + ';--i:' + i + '"><img src="' + heroSrc(p) + '" alt="" decoding="async"></figure>';
+  if (heroPhotos && HERO_LANES.length) {
+    heroPhotos.innerHTML = HERO_LANES.map(function (lane) {
+      // Doubled so translateY(-50%) loops back to an identical frame.
+      var cells = lane.photos.concat(lane.photos).map(function (id) {
+        return '<div class="hero-lane-item" style="--ar:' + lane.ar + '">' +
+               '<img src="public/hero/' + id + '.jpg" alt="" loading="lazy" decoding="async"></div>';
       }).join("");
-      // Two frames so the initial hidden state is painted before transitioning in.
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () { heroPhotos.classList.add("is-in"); });
-      });
-    };
-
-    var heroIndex = 0;
-    var showHeroGroup = function (i) {
-      heroIndex = i;
-      var group = HERO_GROUPS[i];
-      preloadGroup(group).then(function () {
-        renderGroup(group);
-        if (reduceMotion || HERO_GROUPS.length < 2) return;
-        var next = (i + 1) % HERO_GROUPS.length;
-        preloadGroup(HERO_GROUPS[next]);
-        setTimeout(function waitToLeave() {
-          // Don't cycle in a background tab; pick up again when it's visible.
-          if (document.hidden) { setTimeout(waitToLeave, 1000); return; }
-          heroPhotos.classList.remove("is-in");
-          heroPhotos.classList.add("is-out");
-          setTimeout(function () { showHeroGroup(next); }, HERO_TIMING.exit + HERO_TIMING.gap);
-        }, HERO_TIMING.hold + group.length * 130);
-      });
-    };
-    showHeroGroup(0);
+      var style = "--x:" + lane.x + "%;--w:" + lane.w + "%;--dur:" + lane.duration + "s;--delay:" + lane.delay + "s";
+      return '<div class="hero-lane" style="' + style + '"><div class="hero-lane-track">' + cells + "</div></div>";
+    }).join("");
   }
 
   // Footer year
