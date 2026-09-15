@@ -6,25 +6,28 @@
   <title>What Is Judo? — DeLeon Judo Club</title>
   <meta name="description" content="An introduction to judo — the Gentle Way — its history, principles, techniques, and belt system, from DeLeon Judo Club in Petaluma, CA.">
   <link rel="icon" href="public/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
 <header class="site-header">
-  <div class="wrap">
+  <div class="wrap" data-liquid-glass>
     <a class="brand" href="index.html">
       <img src="public/logo.svg" alt="DeLeon Judo Club logo">
-      <span>DeLeon Judo Club<small>Petaluma, CA · Est. 1970</small></span>
+      <span>DeLeon Judo Club</span>
     </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
     <nav class="site-nav" id="site-nav" aria-label="Main">
       <ul>
         <li><a href="classes.html">Classes</a></li>
         <li><a href="kids.html">Kids</a></li>
-        <li><a href="about.html">About Us</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="instructors.html">Instructors</a></li>
         <li><a href="what-is-judo.html">What Is Judo?</a></li>
-        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="faq.html">FAQ</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a class="nav-cta" data-register href="https://secure.rec1.com/CA/petaluma-ca/catalog">Register</a></li>
       </ul>
@@ -95,27 +98,55 @@
   </section>
 
   <section id="faq" data-limit="4"></section>
-  <section id="contact" class="dark"></section>
+  <section id="contact" class="alt"></section>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <div>
-      © <span data-year>2026</span> DeLeon Judo Club · Petaluma, CA<br>
-      <small>A 501(c)(3) non-profit organization · EIN <span data-ein>XX-XXXXXXX</span> · Donations are tax-deductible to the extent allowed by law.</small>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <img src="public/logo.svg" alt="">
+          <span>DeLeon Judo Club</span>
+        </a>
+        <p>Judo for kids and adults in Petaluma, California, since 1970.</p>
+      </div>
+      <nav class="footer-cols" aria-label="Footer">
+        <div>
+          <h4>Club</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="instructors.html">Instructors</a></li>
+            <li><a href="what-is-judo.html">What Is Judo?</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Train</h4>
+          <ul>
+            <li><a href="classes.html">Classes &amp; schedule</a></li>
+            <li><a href="kids.html">Kids program</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a data-register href="https://secure.rec1.com/CA/petaluma-ca/catalog">Register</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy policy</a></li>
+            <li><a href="terms.html">Terms &amp; disclaimer</a></li>
+          </ul>
+        </div>
+      </nav>
     </div>
-    <ul>
-      <li><a href="classes.html">Classes</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="instructors.html">Instructors</a></li>
-      <li><a href="faq.html">FAQs</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="privacy.html">Privacy Policy</a></li>
-      <li><a href="terms.html">Terms &amp; Disclaimer</a></li>
-    </ul>
+    <div class="footer-bottom">
+      <p>&copy; <span data-year>2026</span> DeLeon Judo Club &middot; Petaluma, CA</p>
+      <p>A 501(c)(3) non-profit &middot; EIN <span data-ein>XX-XXXXXXX</span> &middot; Donations are tax-deductible to the extent allowed by law.</p>
+    </div>
   </div>
 </footer>
 
 <script src="js/main.js"></script>
+<script src="js/liquid-glass.js"></script>
 </body>
 </html>

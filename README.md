@@ -13,6 +13,7 @@ faq.html            Full FAQ
 contact.html        Contact
 css/styles.css      All styles
 js/main.js          Club info, FAQ list, contact block, mobile nav
+js/liquid-glass.js  Refracting "liquid glass" backdrop for the nav pill
 public/logo.svg     Logo
 ```
 
