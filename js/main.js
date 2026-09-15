@@ -300,24 +300,25 @@
   // photo names a slot; slots are positions in the hero box as percentages
   // (x/y = top-left corner, w = width, ar = aspect ratio) and stay clear of
   // the centre column where the copy sits. Mix left and right slots in every
-  // group so both sides fill.
+  // group so both sides fill. Sizes deliberately vary a lot: L1/R1/L4/R5 are
+  // big (corners, clear of the copy), L2/L5/R2 are small; give every group a mix.
   var HERO_SLOTS = {
-    L1: { x: 4,  y: 9,  w: 13,   ar: "4/3" },
-    L2: { x: 17, y: 14, w: 9,    ar: "3/4" },
-    L3: { x: 3,  y: 44, w: 10,   ar: "4/3" },
-    L4: { x: 10, y: 60, w: 10.5, ar: "3/4" },
-    L5: { x: 4,  y: 80, w: 11,   ar: "4/3" },
-    R1: { x: 79, y: 8,  w: 14,   ar: "4/3" },
-    R2: { x: 71, y: 24, w: 10,   ar: "4/3" },
-    R3: { x: 86, y: 46, w: 9.5,  ar: "3/4" },
-    R4: { x: 79, y: 64, w: 12,   ar: "4/3" },
-    R5: { x: 72, y: 81, w: 9,    ar: "1/1" }
+    L1: { x: 2,  y: 6,  w: 19, ar: "4/3" },
+    L2: { x: 14, y: 34, w: 7,  ar: "3/4" },
+    L3: { x: 3,  y: 40, w: 10, ar: "4/3" },
+    L4: { x: 6,  y: 62, w: 15, ar: "3/4" },
+    L5: { x: 22, y: 84, w: 8,  ar: "1/1" },
+    R1: { x: 78, y: 5,  w: 20, ar: "4/3" },
+    R2: { x: 71, y: 32, w: 7,  ar: "1/1" },
+    R3: { x: 85, y: 42, w: 12, ar: "3/4" },
+    R4: { x: 74, y: 66, w: 9,  ar: "4/3" },
+    R5: { x: 80, y: 78, w: 17, ar: "4/3" }
   };
   var HERO_GROUPS = [
     [["05", "L1"], ["17", "R2"], ["14", "L4"], ["21", "R4"], ["16", "L2"]],
     [["09", "R1"], ["07", "L1"], ["10", "L3"], ["13", "R3"], ["22", "L5"], ["03", "R4"]],
-    [["01", "L2"], ["12", "R1"], ["06", "L5"], ["11", "R2"], ["18", "L3"], ["15", "R3"]],
-    [["19", "R1"], ["08", "L3"], ["04", "R4"], ["20", "L1"], ["02", "R5"], ["03", "L4"]]
+    [["01", "L4"], ["12", "R1"], ["06", "L5"], ["11", "R2"], ["18", "L3"], ["15", "R3"]],
+    [["19", "R1"], ["08", "L3"], ["04", "R4"], ["20", "L1"], ["02", "R5"], ["03", "L2"]]
   ];
   // life = how long each photo is on screen (ms); stagger must match the
   // animation-delay step in css/styles.css.
