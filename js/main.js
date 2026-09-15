@@ -293,35 +293,76 @@
     el.innerHTML = "<p>" + CLUB.nonprofit.blurb + "</p>";
   });
 
-  // ---------- Hero photo lanes (edit here) ----------
-  // Club photos drift upward behind the home-page headline, always moving —
-  // never holding still. Each lane sits at a fixed spot in the hero box
-  // (x/w as % of the hero, clear of the centre column) and loops its photo
-  // list forever via a pure-CSS animation; fading in/out is just what
-  // happens as a photo crosses the masked top/bottom edge of the hero while
-  // it scrolls through, not a separate scripted step. Lanes are narrow and
-  // scattered (reusing the old slot positions/sizes) so it still reads as
-  // loose clusters rather than uniform columns.
-  var HERO_LANES = [
-    { x: 2,  w: 10, ar: "4/3", duration: 28, delay: -4,  photos: ["05", "17", "14", "21"] },
-    { x: 13, w: 7,  ar: "3/4", duration: 36, delay: -14, photos: ["09", "07", "10", "13"] },
-    { x: 21, w: 6,  ar: "1/1", duration: 44, delay: -22, photos: ["22", "01", "16"] },
-    { x: 72, w: 6,  ar: "1/1", duration: 32, delay: -8,  photos: ["12", "06", "11"] },
-    { x: 79, w: 7,  ar: "3/4", duration: 40, delay: -18, photos: ["18", "15", "19", "08"] },
-    { x: 87, w: 11, ar: "4/3", duration: 24, delay: -10, photos: ["04", "20", "03", "02"] }
+  // ---------- Hero photo clusters (edit here) ----------
+  // Groups of photos from public/hero/ cycle behind the home-page headline.
+  // Each photo rises for its whole lifetime — fading and popping in as it
+  // starts, fading out still rising — then the next group takes over. Each
+  // photo names a slot; slots are positions in the hero box as percentages
+  // (x/y = top-left corner, w = width, ar = aspect ratio) and stay clear of
+  // the centre column where the copy sits. Mix left and right slots in every
+  // group so both sides fill.
+  var HERO_SLOTS = {
+    L1: { x: 4,  y: 9,  w: 13,   ar: "4/3" },
+    L2: { x: 17, y: 14, w: 9,    ar: "3/4" },
+    L3: { x: 3,  y: 44, w: 10,   ar: "4/3" },
+    L4: { x: 10, y: 60, w: 10.5, ar: "3/4" },
+    L5: { x: 4,  y: 80, w: 11,   ar: "4/3" },
+    R1: { x: 79, y: 8,  w: 14,   ar: "4/3" },
+    R2: { x: 71, y: 24, w: 10,   ar: "4/3" },
+    R3: { x: 86, y: 46, w: 9.5,  ar: "3/4" },
+    R4: { x: 79, y: 64, w: 12,   ar: "4/3" },
+    R5: { x: 72, y: 81, w: 9,    ar: "1/1" }
+  };
+  var HERO_GROUPS = [
+    [["05", "L1"], ["17", "R2"], ["14", "L4"], ["21", "R4"], ["16", "L2"]],
+    [["09", "R1"], ["07", "L1"], ["10", "L3"], ["13", "R3"], ["22", "L5"], ["03", "R4"]],
+    [["01", "L2"], ["12", "R1"], ["06", "L5"], ["11", "R2"], ["18", "L3"], ["15", "R3"]],
+    [["19", "R1"], ["08", "L3"], ["04", "R4"], ["20", "L1"], ["02", "R5"], ["03", "L4"]]
   ];
+  // life = how long each photo is on screen (ms); stagger must match the
+  // animation-delay step in css/styles.css.
+  var HERO_TIMING = { life: 6500, stagger: 160, gap: 150 };
 
   var heroPhotos = $("[data-hero-photos]");
-  if (heroPhotos && HERO_LANES.length) {
-    heroPhotos.innerHTML = HERO_LANES.map(function (lane) {
-      // Doubled so translateY(-50%) loops back to an identical frame.
-      var cells = lane.photos.concat(lane.photos).map(function (id) {
-        return '<div class="hero-lane-item" style="--ar:' + lane.ar + '">' +
-               '<img src="public/hero/' + id + '.jpg" alt="" loading="lazy" decoding="async"></div>';
+  if (heroPhotos && HERO_GROUPS.length) {
+    var heroSrc = function (p) { return "public/hero/" + p[0] + ".jpg"; };
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var preloadGroup = function (group) {
+      return Promise.all(group.map(function (p) {
+        return new Promise(function (resolve) {
+          var img = new Image();
+          img.onload = img.onerror = resolve;
+          img.src = heroSrc(p);
+        });
+      }));
+    };
+
+    var renderGroup = function (group) {
+      heroPhotos.innerHTML = group.map(function (p, i) {
+        var s = HERO_SLOTS[p[1]];
+        return '<figure class="hero-photo" style="--x:' + s.x + '%;--y:' + s.y + '%;--w:' + s.w +
+               '%;--ar:' + s.ar + ';--i:' + i + ';--life:' + HERO_TIMING.life + 'ms">' +
+               '<img src="' + heroSrc(p) + '" alt="" decoding="async"></figure>';
       }).join("");
-      var style = "--x:" + lane.x + "%;--w:" + lane.w + "%;--dur:" + lane.duration + "s;--delay:" + lane.delay + "s";
-      return '<div class="hero-lane" style="' + style + '"><div class="hero-lane-track">' + cells + "</div></div>";
-    }).join("");
+    };
+
+    var showHeroGroup = function (i) {
+      var group = HERO_GROUPS[i];
+      preloadGroup(group).then(function () {
+        renderGroup(group);
+        if (reduceMotion || HERO_GROUPS.length < 2) return;
+        var next = (i + 1) % HERO_GROUPS.length;
+        preloadGroup(HERO_GROUPS[next]);
+        var groupLength = HERO_TIMING.life + (group.length - 1) * HERO_TIMING.stagger + HERO_TIMING.gap;
+        setTimeout(function waitForNext() {
+          // Don't cycle in a background tab; pick up again when it's visible.
+          if (document.hidden) { setTimeout(waitForNext, 1000); return; }
+          showHeroGroup(next);
+        }, groupLength);
+      });
+    };
+    showHeroGroup(0);
   }
 
   // Footer year
