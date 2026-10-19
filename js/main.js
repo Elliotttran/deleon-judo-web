@@ -191,7 +191,7 @@
       : '<div class="grid grid-2">' + CLUB.affiliations.map(function (o) {
           return '<div class="card"><span class="affil-logo-box">' + logoImg(o) + '</span>' +
                  '<h3>' + o.name + '</h3><p>' + o.blurb +
-                 '</p><p><a href="' + o.url + '" target="_blank" rel="noopener">Visit ' + o.abbr + ' →</a></p></div>';
+                 '</p><p><a class="link-arrow" href="' + o.url + '" target="_blank" rel="noopener">Visit ' + o.abbr + '</a></p></div>';
         }).join("") + "</div>";
   });
 
@@ -203,7 +203,7 @@
         '<div class="prose">' +
           '<span class="affil-logo-box">' + logoImg(y) + '</span>' +
           '<p>' + y.blurb + '</p>' +
-          '<p><a href="' + y.url + '" target="_blank" rel="noopener">' + y.name + ' (' + y.abbr + ') →</a></p>' +
+          '<p><a class="link-arrow" href="' + y.url + '" target="_blank" rel="noopener">' + y.name + ' (' + y.abbr + ')</a></p>' +
         '</div>' +
         '<div class="card">' +
           '<p class="rank">DeLeon on the CENCO boards</p>' +
