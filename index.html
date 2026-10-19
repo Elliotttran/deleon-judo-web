@@ -49,23 +49,49 @@
     </div>
   </div>
 
+  <!-- Below the hero. Rhythm: panel, quiet, BLUE BAND, quiet, panel, RED CTA,
+       quiet — colour blocks never touch. Cards use the double-bezel (.shell >
+       .core). .ph blocks are photo placeholders; each caption names the shot.
+       [data-reveal] elements fade up as they scroll in (js/main.js). -->
+
   <section class="alt">
     <div class="wrap">
-      <div class="grid grid-2" style="align-items:center">
-        <div class="prose">
-          <h2>Welcome to the dojo</h2>
-          <p>DeLeon Judo Club was founded in January 1970 by Jim Santiago DeLeon and has been led by <strong>Sensei Henry Kaku</strong> (Rokudan, 6th Dan) since 2007. We are a volunteer-run, non-profit club that trains at Herzog Hall on the Petaluma fairgrounds.</p>
-          <p>Our goal is simple: to give students not only the physical skills of judo, but its philosophy and traditions. We introduce judo as a lifetime pursuit — an art that can always be refined — in a dojo that is a place of stability and community.</p>
-          <p><a class="link-arrow" href="instructors.html">Meet our instructors</a></p>
+      <div class="grid-12">
+        <div class="shell span-12" data-reveal>
+          <div class="core start-card">
+            <div class="start-copy">
+              <h2>Start any Tuesday or Thursday.</h2>
+              <p class="lede">No experience needed. Kids, teens and adults train together, ages 6 and up.</p>
+              <div class="actions push">
+                <a class="btn" data-register href="https://secure.rec1.com/CA/petaluma-ca/catalog">Go to registration</a>
+                <a class="link-arrow" href="classes.html">Class details</a>
+              </div>
+            </div>
+            <div class="week-panel" data-week></div>
+          </div>
         </div>
-        <div class="card">
-          <h3>How to join</h3>
-          <ol class="prose" style="padding-left:1.2rem;margin:0">
-            <li>Come watch or try a Tuesday or Thursday 5:30 pm class — no experience needed.</li>
-            <li>Register and pay the monthly rate through <strong>Petaluma Parks &amp; Recreation</strong> (search "Judo"). Family discounts available.</li>
-            <li>Show up in comfortable athletic clothes. We'll help you get a gi when you're ready.</li>
-          </ol>
-          <p style="margin:1rem 0 0"><a class="btn" data-register href="https://secure.rec1.com/CA/petaluma-ca/catalog">Go to registration</a></p>
+
+        <div class="shell span-6" data-reveal>
+          <div class="core">
+            <h3 class="card-title">Your first class in three steps</h3>
+            <ol class="start-list">
+              <li><span><strong>Come watch or try a class.</strong> No appointment and no cost. Talk to an instructor before or after.</span></li>
+              <li><span><strong>Register with Parks &amp; Rec.</strong> Pay the monthly rate through Petaluma Parks &amp; Recreation (search "Judo"). Family discounts available.</span></li>
+              <li><span><strong>Wear athletic clothes.</strong> Nothing with zippers or buttons. We'll help you get a gi when you're ready.</span></li>
+            </ol>
+          </div>
+        </div>
+        <div class="shell span-6" data-reveal>
+          <div class="core place-card">
+            <iframe class="place-map" loading="lazy" title="Map to Herzog Hall" src="https://www.google.com/maps?q=Herzog%20Hall%2C%20Sonoma-Marin%20Fairgrounds%2C%20Petaluma%2C%20CA%2094952&amp;output=embed" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="place-info">
+              <div>
+                <h3 class="card-title">Herzog Hall</h3>
+                <p>Sonoma-Marin Fairgrounds, 175 Fairgrounds Drive, Petaluma. Parking on site.</p>
+              </div>
+              <a class="link-arrow" href="https://www.google.com/maps/dir/?api=1&amp;destination=Herzog%20Hall%2C%20Sonoma-Marin%20Fairgrounds%2C%20Petaluma%2C%20CA%2094952" target="_blank" rel="noopener">Directions</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -73,69 +99,91 @@
 
   <section>
     <div class="wrap">
-      <div class="section-title center">
-        <h2>Class schedule</h2>
-        <p>All classes at Herzog Hall, Sonoma-Marin Fairgrounds, 175 Fairgrounds Drive, Petaluma.</p>
-      </div>
-      <div class="table-wrap">
-        <table class="schedule">
-          <thead><tr><th>Day</th><th>Time</th><th>Who</th></tr></thead>
-          <tbody data-schedule></tbody>
-        </table>
-      </div>
-      <div class="link-row">
-        <a class="link-arrow" href="classes.html">Class details</a>
-        <a class="link-arrow" href="kids.html">Kids program</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="alt">
-    <div class="wrap">
-      <div class="section-title center">
+      <div class="head-split" data-reveal>
         <h2>What we teach</h2>
-        <p>The Kodokan curriculum, in the order it was meant to be learned.</p>
+        <p class="lede">The Kodokan curriculum, the same one taught in Tokyo. Everyone starts by learning to fall.</p>
       </div>
-      <div class="grid grid-3">
-        <div class="card">
+      <ol class="belt-path">
+        <li style="--c: var(--belt-yellow)" data-reveal>
+          <div class="shell"><figure class="core ph"><figcaption>Photo: a student mid-breakfall on the mat, landscape</figcaption></figure></div>
           <h3>Ukemi — falling safely</h3>
           <p>The first skill every student learns, and the one they use most. Nobody is thrown before they can land.</p>
-        </div>
-        <div class="card">
+        </li>
+        <li style="--c: var(--belt-green)" data-reveal>
+          <div class="shell"><figure class="core ph"><figcaption>Photo: a throw in motion, both players in gi, landscape</figcaption></figure></div>
           <h3>Throws &amp; groundwork</h3>
           <p><em>Nage-waza</em> — hip throws, foot sweeps, shoulder throws — and <em>katame-waza</em>: pins, turnovers, escapes, and for teens and adults, chokes and arm-locks.</p>
-        </div>
-        <div class="card">
+        </li>
+        <li style="--c: var(--belt-brown)" data-reveal>
+          <div class="shell"><figure class="core ph"><figcaption>Photo: partners bowing before randori, landscape</figcaption></figure></div>
           <h3>Randori, kata &amp; etiquette</h3>
           <p>Free practice with a partner, the traditional forms, the Japanese terminology, and the manners that go with all of it.</p>
-        </div>
+        </li>
+      </ol>
+      <div class="link-row left"><a class="link-arrow" href="classes.html#curriculum">Full curriculum and promotion</a></div>
+    </div>
+  </section>
+
+  <section class="band blue">
+    <div class="wrap band-split">
+      <div data-reveal>
+        <h2>Maximum efficiency. Mutual welfare and benefit.</h2>
+        <p>Judo's two guiding principles, from its founder Jigoro Kano. It uses leverage, balance and your opponent's own strength — and the principles are as much about how you live as how you throw.</p>
+        <div class="actions"><a class="link-arrow" href="what-is-judo.html">Learn what judo is</a></div>
       </div>
-      <div class="link-row"><a class="link-arrow" href="classes.html#curriculum">See the full curriculum and how promotion works</a></div>
+      <div class="shell on-colour" data-reveal><figure class="core ph on-colour"><figcaption>Photo: the whole class lined up and bowing in, wide shot</figcaption></figure></div>
     </div>
   </section>
 
   <section>
     <div class="wrap">
-      <div class="section-title center">
-        <h2>Recognized judo</h2>
-        <p>We teach Kodokan judo and belong to the organizations that govern it — so the rank you earn here counts anywhere. Our instructors help lead our regional black belt association.</p>
+      <div class="head-split">
+        <h2 data-reveal>Taught by national-level black belts.</h2>
+        <p class="lede" data-reveal>Two senior black belts lead every class, with a team of black-belt students who grew up on this mat. We've trained students who went on to compete nationally.</p>
       </div>
-      <div data-affiliations="brief"></div>
-      <div class="link-row"><a class="link-arrow" href="about.html#affiliations">About our affiliations</a></div>
+
+      <div class="faculty">
+        <article class="mentor" data-reveal>
+          <figure class="ph portrait"><figcaption>Photo: Sensei Henry Kaku on the mat, teaching or demonstrating, portrait</figcaption></figure>
+          <div class="mentor-meta">
+            <span class="obi obi-kohaku" aria-hidden="true"></span>
+            <p class="rank">6th dan · Head instructor</p>
+          </div>
+          <h3>Sensei Henry Kaku</h3>
+          <p>Competed at High School and AAU Nationals. Over 50 years in judo, leading DeLeon since 2007.</p>
+        </article>
+        <article class="mentor" data-reveal style="--d: 90ms">
+          <figure class="ph portrait"><figcaption>Photo: Sensei Davin Tillman coaching a student, portrait</figcaption></figure>
+          <div class="mentor-meta">
+            <span class="obi" aria-hidden="true"></span>
+            <p class="rank">5th dan · Assistant head instructor</p>
+          </div>
+          <h3>Sensei Davin Tillman</h3>
+          <p>Started here at age 5 in 1992. Certified regional referee and president of CENCO's board.</p>
+        </article>
+        <aside class="senpai-panel" data-reveal style="--d: 180ms" aria-label="Senpai">
+          <h3>Senpai</h3>
+          <p>Black belts who grew up on this mat and now help teach every class.</p>
+          <ul class="senpai-list">
+            <li><span class="obi" aria-hidden="true"></span>Tim Sasan<small>1st dan</small></li>
+            <li><span class="obi" aria-hidden="true"></span>Joe Lauritzen<small>1st dan</small></li>
+            <li><span class="obi" aria-hidden="true"></span>Will Sakaguchi<small>1st dan</small></li>
+          </ul>
+          <a class="link-arrow" href="instructors.html">Meet our instructors</a>
+        </aside>
+      </div>
+
+      <div class="shell recognized-shell" data-reveal>
+        <div class="core recognized">
+          <p><strong>Rank earned here counts anywhere.</strong> We belong to the organizations that govern Kodokan judo, and our instructors help lead the regional black belt association.</p>
+          <div data-affiliations="logos"></div>
+          <a class="link-arrow" href="about.html#affiliations">Our affiliations</a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="callout-section alt">
-    <div class="wrap">
-      <p class="eyebrow">The Gentle Way</p>
-      <blockquote class="quote-lead">
-        Judo is the way to the most efficient use of both physical and mental energy. Through training in the attack and defense techniques of judo, the practitioner nurtures their physical and mental strength, and gradually embodies the essence of the Way of Judo.
-        <cite>Dr. Jigoro Kano, founder of Judo</cite>
-      </blockquote>
-      <p>Judo uses leverage, balance, movement, and your opponent's own strength. Its two guiding principles — <strong>Maximum Efficiency</strong> and <strong>Mutual Welfare and Benefit</strong> — are as much about how you live as how you throw.</p>
-      <div class="link-row"><a class="link-arrow" href="what-is-judo.html">Learn what judo is</a></div>
-    </div>
-  </section>
+  <section id="faq" class="alt" data-limit="4"></section>
 
   <section class="callout-section red">
     <div class="wrap">
@@ -148,8 +196,7 @@
     </div>
   </section>
 
-  <section id="faq" data-limit="4"></section>
-  <section id="contact" class="alt"></section>
+  <section id="contact"></section>
 </main>
 
 <footer class="site-footer">
@@ -199,5 +246,6 @@
 
 <script src="js/main.js"></script>
 <script src="js/liquid-glass.js"></script>
+<script src="js/style-lab.js"></script>
 </body>
 </html>

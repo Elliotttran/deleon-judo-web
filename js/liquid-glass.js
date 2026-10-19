@@ -29,7 +29,10 @@
   // strength = how far the rim bends the backdrop; blur = frost.
   // Tuned for a ~58px-tall bar: the rim (inset + feather) must stay well
   // under half the height or the whole bar bends instead of just its edge.
-  var DEFAULTS = { depth: 4, strength: 30, aberration: 1, blur: 7, brightness: 0.98, saturate: 1.4 };
+  // saturate 1.6 / aberration 1.5 follow the defaults in PrismalAGSL, a
+  // well-starred liquid-glass shader: richer colour through the glass and a
+  // slightly more visible RGB fringe at the rim.
+  var DEFAULTS = { depth: 5, strength: 30, aberration: 1.5, blur: 7, brightness: 0.98, saturate: 1.6 };
 
   // Safari parses `backdrop-filter: url()` but does not render SVG filters on
   // a backdrop, so a pure feature test is not enough: exclude WebKit-only UAs.

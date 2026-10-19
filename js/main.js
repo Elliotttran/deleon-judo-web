@@ -84,9 +84,8 @@
       ]
     },
     schedule: [
-      { day: "Monday", time: "5:30 – 7:00 pm", who: "Experienced students" },
       { day: "Tuesday & Thursday", time: "5:30 – 7:00 pm", who: "All students (ages 6+)" },
-      { day: "Tuesday & Thursday", time: "7:00 – 8:30 pm", who: "By appointment only" }
+      { day: "Monday", time: "5:30 – 7:00 pm", who: "All ages, by appointment" }
     ]
   };
 
@@ -179,19 +178,53 @@
     }).join("");
   });
 
+  // ---------- Week strip (any element with data-week) ----------
+  // A Mon–Sun strip built from CLUB.schedule: regular class days in blue,
+  // appointment days marked, the rest quiet. A legend lists each session.
+  document.querySelectorAll("[data-week]").forEach(function (el) {
+    var DAYS = [["Monday", "Mon"], ["Tuesday", "Tue"], ["Wednesday", "Wed"], ["Thursday", "Thu"], ["Friday", "Fri"], ["Saturday", "Sat"], ["Sunday", "Sun"]];
+    var isOpen = function (s) { return /all students/i.test(s.who); };
+    var start = function (t) { return t.split("–")[0].trim(); };
+    var cells = DAYS.map(function (d) {
+      var hit = CLUB.schedule.filter(function (s) { return s.day.indexOf(d[0]) > -1; })[0];
+      var kind = hit ? (isOpen(hit) ? "class" : "appt") : "off";
+      var note = hit ? (isOpen(hit) ? start(hit.time) : "Appt") : "";
+      return '<li class="day ' + kind + '"><span class="day-name">' + d[1] + '</span><span class="day-note">' + note + '</span></li>';
+    }).join("");
+    var rows = CLUB.schedule.filter(isOpen).concat(CLUB.schedule.filter(function (s) { return !isOpen(s); }));
+    el.innerHTML =
+      '<div class="week-card">' +
+        '<ul class="week" aria-hidden="true">' + cells + '</ul>' +
+        '<ul class="week-legend">' + rows.map(function (s) {
+          var open = isOpen(s);
+          var day = s.day.replace("Tuesday", "Tues").replace("Thursday", "Thurs");
+          return '<li class="' + (open ? "class" : "appt") + '"><strong><span class="key"></span>' + day + '</strong>' +
+                 '<span class="when">' + s.time + '</span><span class="who">' + (open ? "All students, ages 6 and up" : s.who) + '</span></li>';
+        }).join("") + '</ul>' +
+      '</div>';
+  });
+
   // ---------- Affiliations (any element with data-affiliations) ----------
   // data-affiliations="brief" renders the one-line version used on the home page.
+  // data-affiliations="logos" renders a compact stacked list of marks.
   document.querySelectorAll("[data-affiliations]").forEach(function (el) {
-    var brief = el.getAttribute("data-affiliations") === "brief";
+    var mode = el.getAttribute("data-affiliations");
+    var brief = mode === "brief";
+    if (mode === "logos") {
+      el.innerHTML = '<ul class="affil-logos">' + CLUB.affiliations.concat([CLUB.yudanshakai]).map(function (o) {
+        return '<li title="' + o.name + '">' + logoImg(o) + '</li>';
+      }).join("") + "</ul>";
+      return;
+    }
     el.innerHTML = brief
       ? '<ul class="affil-strip">' + CLUB.affiliations.concat([CLUB.yudanshakai]).map(function (o) {
           return '<li><span class="affil-logo-box">' + logoImg(o) + '</span>' +
                  '<a href="' + o.url + '" target="_blank" rel="noopener">' + o.abbr + "</a> <small>" + o.name + "</small></li>";
         }).join("") + "</ul>"
-      : '<div class="grid grid-2">' + CLUB.affiliations.map(function (o) {
-          return '<div class="card"><span class="affil-logo-box">' + logoImg(o) + '</span>' +
-                 '<h3>' + o.name + '</h3><p>' + o.blurb +
-                 '</p><p><a class="link-arrow" href="' + o.url + '" target="_blank" rel="noopener">Visit ' + o.abbr + '</a></p></div>';
+      : '<div class="cards two">' + CLUB.affiliations.map(function (o) {
+          return '<div class="shell" data-reveal><div class="core affil-card"><span class="affil-logo-box">' + logoImg(o) + '</span>' +
+                 '<h3>' + o.name + '</h3><p>' + o.blurb + '</p>' +
+                 '<div class="push"><a class="link-arrow" href="' + o.url + '" target="_blank" rel="noopener">Visit ' + o.abbr + '</a></div></div></div>';
         }).join("") + "</div>";
   });
 
@@ -199,46 +232,56 @@
   document.querySelectorAll("[data-yudanshakai]").forEach(function (el) {
     var y = CLUB.yudanshakai;
     el.innerHTML =
-      '<div class="grid grid-2" style="align-items:start">' +
-        '<div class="prose">' +
+      '<div class="grid-12">' +
+        '<div class="shell span-7" data-reveal><div class="core affil-card">' +
           '<span class="affil-logo-box">' + logoImg(y) + '</span>' +
           '<p>' + y.blurb + '</p>' +
-          '<p><a class="link-arrow" href="' + y.url + '" target="_blank" rel="noopener">' + y.name + ' (' + y.abbr + ')</a></p>' +
-        '</div>' +
-        '<div class="card">' +
-          '<p class="rank">DeLeon on the CENCO boards</p>' +
+          '<div class="push"><a class="link-arrow" href="' + y.url + '" target="_blank" rel="noopener">Visit ' + y.abbr + '</a></div>' +
+        '</div></div>' +
+        '<div class="shell span-5" data-reveal><div class="core">' +
+          '<h3>DeLeon on the CENCO boards</h3>' +
           '<ul class="board-list">' +
             y.leadership.map(function (l) {
               return '<li><strong>' + l.person + '</strong><small>' + l.role + '</small></li>';
             }).join("") +
           '</ul>' +
-          '<p style="margin:1rem 0 0"><small>Board rosters are published at <a href="' + y.aboutUrl + '" target="_blank" rel="noopener">cencojudo.com</a>.</small></p>' +
-        '</div>' +
+          '<p class="push"><small>Board rosters are published at <a href="' + y.aboutUrl + '" target="_blank" rel="noopener">cencojudo.com</a>.</small></p>' +
+        '</div></div>' +
       '</div>';
   });
 
+  // ---------- Legal-page contents (any element with data-toc) ----------
+  // Lists the numbered h2s of the .legal text beside it.
+  document.querySelectorAll("[data-toc]").forEach(function (el) {
+    var heads = el.parentNode.querySelectorAll(".legal h2[id]");
+    if (!heads.length) return;
+    el.innerHTML = '<p>On this page</p><ol>' + Array.prototype.map.call(heads, function (h) {
+      return '<li><a href="#' + h.id + '">' + h.textContent.replace(/^\d+\.\s*/, "") + '</a></li>';
+    }).join("") + '</ol>';
+  });
+
   // ---------- Shared FAQ section ----------
-  var faqSection = $("#faq");
+  var faqSection = $("section#faq");
   if (faqSection) {
     var limit = parseInt(faqSection.getAttribute("data-limit") || "0", 10);
     var items = limit > 0 ? FAQ.slice(0, limit) : FAQ;
     var isFull = limit === 0;
+    var faqTitle = faqSection.hasAttribute("data-notitle") ? "" :
+      '<div class="section-title" data-reveal><h2>Questions, answered.</h2>' +
+      '<p>' + (isFull ? "Everything you need to know before your first class." : "The ones we hear most from new families.") + '</p>' +
+      (isFull ? "" : '<div class="actions"><a class="link-arrow" href="faq.html">See all FAQs</a></div>') + '</div>';
     faqSection.innerHTML =
-      '<div class="wrap">' +
-        (faqSection.hasAttribute("data-notitle") ? "" :
-          '<div class="section-title"><h2>Frequently Asked Questions</h2>' +
-          '<p>' + (isFull ? "Everything you need to know before your first class." : "Quick answers to the most common questions.") + '</p></div>') +
+      '<div class="wrap' + (faqTitle ? " faq-split" : "") + '">' + faqTitle +
         '<div class="faq-list">' +
           items.map(function (f) {
-            return '<details class="faq-item"><summary>' + f.q + '</summary><div class="faq-body"><p>' + f.a + '</p></div></details>';
+            return '<details class="faq-item" data-reveal><summary>' + f.q + '</summary><div class="faq-body"><p>' + f.a + '</p></div></details>';
           }).join("") +
         '</div>' +
-        (isFull ? "" : '<p style="margin-top:1.25rem"><a class="btn btn-outline" href="faq.html">See all FAQs</a></p>') +
       '</div>';
   }
 
   // ---------- Shared contact section ----------
-  var contactSection = $("#contact");
+  var contactSection = $("section#contact");
   if (contactSection) {
     // Phone and email rows only render when those details are filled in above.
     var phones = CLUB.phones.map(function (p) {
@@ -261,9 +304,9 @@
     var mapSrc = "https://www.google.com/maps?q=" + encodeURIComponent(CLUB.location.mapQuery) + "&output=embed";
     contactSection.innerHTML =
       '<div class="wrap">' +
-        '<div class="section-title"><h2>Contact Us</h2><p>The best way to reach us is in person — come watch a class and meet the instructors.</p></div>' +
+        '<div class="section-title" data-reveal><h2>Find the dojo.</h2><p>The best way to reach us is in person — come watch a class and meet the instructors.</p></div>' +
         '<div class="contact-grid">' +
-          '<div>' +
+          '<div class="shell" data-reveal><div class="core">' +
             '<ul class="contact-list">' +
               '<li><span>Dojo</span><span><strong>' + CLUB.location.name + '</strong><br>' + CLUB.location.street + '<br>' + CLUB.location.city + '</span></li>' +
               '<li><span>Classes</span><span>' + CLUB.schedule.map(function (s) { return s.day + " " + s.time + " <small>(" + s.who + ")</small>"; }).join("<br>") + '</span></li>' +
@@ -273,10 +316,10 @@
               '<li><span>Registration</span><span>Through the City of Petaluma Parks &amp; Recreation Department — search "Judo" in the <a href="' + CLUB.registerUrl + '" target="_blank" rel="noopener">online catalog</a>.</span></li>' +
               mailRow +
             '</ul>' +
-            '<p><a class="btn btn-gold" href="' + CLUB.registerUrl + '" target="_blank" rel="noopener">Register via Petaluma Parks &amp; Rec</a></p>' +
-            '<p class="muted" style="font-size:0.9rem;margin:0">DeLeon Judo Club is a 501(c)(3) non-profit organization (EIN ' + CLUB.nonprofit.ein + '). All registration and payment is handled by the City of Petaluma Parks &amp; Recreation Department.</p>' +
-          '</div>' +
-          '<div><iframe class="map-embed" loading="lazy" title="Map to ' + CLUB.location.name + '" src="' + mapSrc + '" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div>' +
+            '<div class="actions"><a class="btn" href="' + CLUB.registerUrl + '" target="_blank" rel="noopener">Register via Parks &amp; Rec</a></div>' +
+            '<p class="muted contact-note">DeLeon Judo Club is a 501(c)(3) non-profit organization (EIN ' + CLUB.nonprofit.ein + '). All registration and payment is handled by the City of Petaluma Parks &amp; Recreation Department.</p>' +
+          '</div></div>' +
+          '<div class="shell" data-reveal><iframe class="core map-embed" loading="lazy" title="Map to ' + CLUB.location.name + '" src="' + mapSrc + '" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div>' +
         '</div>' +
       '</div>';
   }
@@ -364,6 +407,28 @@
       });
     };
     showHeroGroup(0);
+  }
+
+  // ---------- Scroll reveal ----------
+  // [data-reveal] elements rise and un-blur once as they enter the viewport.
+  // Siblings stagger. Content stays visible without JS or with reduced motion,
+  // because the hidden state only applies under html.reveal-on.
+  var revealEls = document.querySelectorAll("[data-reveal]");
+  if (revealEls.length && "IntersectionObserver" in window &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("reveal-on");
+    var revealIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add("is-in");
+        revealIO.unobserve(en.target);
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
+    revealEls.forEach(function (el) {
+      var sibs = Array.prototype.filter.call(el.parentNode.children, function (c) { return c.hasAttribute("data-reveal"); });
+      el.style.setProperty("--d", Math.min(sibs.indexOf(el), 4) * 90 + "ms");
+      revealIO.observe(el);
+    });
   }
 
   // Footer year

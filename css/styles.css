@@ -1,7 +1,7 @@
 /* DeLeon Judo Club — styles
  * Look: white page, floating pill nav, big inset rounded panels instead of
  * bands and borders, generous vertical rhythm, black pill buttons. Red stays
- * the accent (links, eyebrows, the red callout band). */
+ * the accent (links, the red callout band). */
 :root {
   --red: #a30000;
   --black: #111111;
@@ -12,6 +12,17 @@
   --panel: #f4f4f4;
   --panel-deep: #e9e9e9;
   --gold: #ffcc00;
+  /* Judo belt colours, in kyu order — accents that break up the white page.
+     Used as tile fills and small markers, never as text on white (yellow
+     fails contrast; --belt-yellow-ink is the readable version). */
+  --belt-yellow: #f2b705;
+  --belt-yellow-ink: #8a6800;
+  --belt-orange: #b9530f;  /* deep enough for white text (4.9:1) */
+  --belt-green: #267a4b;   /* 5.3:1 with white */
+  --belt-blue: #2563c9;
+  --belt-blue-deep: #1b4fa6;   /* hover / pressed */
+  --belt-purple: #6d4ab0;
+  --belt-brown: #7b4b2a;
   --max: 1080px;
   --gutter: clamp(12px, 1.6vw, 24px);   /* inset of panels from the viewport edge */
   --radius: 16px;                        /* cards, tables, FAQ rows */
@@ -43,60 +54,70 @@ p { margin: 0 0 1em; }
 small { color: var(--muted); }
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 clamp(1.25rem, 3vw, 2.5rem); }
 .muted { color: var(--muted); }
-.eyebrow { color: var(--red); text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.72rem; font-weight: 600; margin-bottom: 1rem; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* Buttons — pills. Primary is black; outline is white with a hairline. */
-.btn {
-  display: inline-block;
-  padding: 0.7rem 1.25rem;
+/* Buttons — pills on a heavy custom curve. Primary is belt blue; secondary
+   (.btn-outline and .link-arrow) is a flat tone step. Arrow buttons carry the
+   arrow in its own circle, flush to the right, which nudges on hover. */
+:root { --spring: cubic-bezier(0.32, 0.72, 0, 1); }
+.btn, .link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1.4rem;
+  border: 0;
   border-radius: 999px;
   font-weight: 600;
   font-size: 0.95rem;
   line-height: 1.2;
-  text-decoration: none;
-  border: 1px solid var(--black);
-  background: var(--black);
-  color: #fff;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-.btn:hover { background: #333; border-color: #333; color: #fff; }
-.btn.btn-outline { background: #fff; color: var(--black); border-color: var(--line); }
-.btn.btn-outline:hover { background: var(--panel); border-color: var(--panel); color: var(--black); }
-.btn.btn-gold { background: var(--black); border-color: var(--black); color: #fff; }
-.btn.btn-gold:hover { background: #333; border-color: #333; }
-
-/* Arrow links — the quiet counterpart to a button. Black, no underline; a
-   muted arrow that slides on hover, so the link reads as a direction rather
-   than as decorated body text. Inline links inside prose stay red. */
-.link-arrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--black);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
   letter-spacing: -0.01em;
-  line-height: 1.3;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.5s var(--spring), color 0.5s var(--spring), transform 0.5s var(--spring);
 }
-.link-arrow::after {
-  content: "\2192";
-  font-weight: 400;
-  color: var(--muted);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-.link-arrow:hover { color: var(--black); }
-.link-arrow:hover::after { transform: translateX(4px); color: var(--black); }
-.link-arrow:focus-visible { outline: 2px solid var(--black); outline-offset: 4px; border-radius: 2px; }
-/* A row of them: centered under a grid or table, separated by space, not bullets. */
-.link-row { display: flex; flex-wrap: wrap; gap: 0.5rem 2.25rem; justify-content: center; margin: 2rem 0 0; }
-.link-row.left { justify-content: flex-start; }
+.btn { background: var(--belt-blue); color: #fff; }
+.btn:hover { background: var(--belt-blue-deep); color: #fff; }
+.btn:active, .link-arrow:active { transform: scale(0.98); }
+.btn:focus-visible, .link-arrow:focus-visible { outline: 2px solid var(--belt-blue); outline-offset: 3px; }
+.btn.btn-outline, .link-arrow { background: var(--panel); color: var(--black); }
+.btn.btn-outline:hover, .link-arrow:hover { background: var(--panel-deep); color: var(--black); }
+.btn.btn-gold { background: var(--belt-blue); color: #fff; }
 
-section.dark .link-arrow, .callout-section.red .link-arrow { color: #fff; }
-section.dark .link-arrow::after { color: var(--gold); }
-.callout-section.red .link-arrow::after { color: rgba(255,255,255,0.7); }
-.callout-section.red .link-arrow:hover::after { color: #fff; }
+/* The nested arrow: primary buttons and .link-arrow get it; .btn-outline
+   stays plain text so a pair never shows two arrows. */
+.btn:not(.btn-outline), .link-arrow { padding-right: 0.4rem; }
+.btn:not(.btn-outline)::after, .link-arrow::after {
+  content: "\2197";
+  display: inline-grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.16);
+  transition: transform 0.5s var(--spring), background 0.5s var(--spring);
+}
+.link-arrow::after { content: "\2192"; background: rgba(0, 0, 0, 0.06); }
+.btn:not(.btn-outline):hover::after, .link-arrow:hover::after { transform: translate(3px, -1px) scale(1.05); }
+.link-arrow:hover::after { transform: translateX(3px) scale(1.05); }
+
+/* On a gray surface, flip secondaries to white */
+section.alt .link-arrow, section.alt .btn.btn-outline, .core-panel .link-arrow { background: var(--bg); }
+section.alt .link-arrow:hover, section.alt .btn.btn-outline:hover { background: #fafafa; }
+section.alt .core .link-arrow { background: var(--panel); }
+section.alt .core .link-arrow:hover { background: var(--panel-deep); }
+/* On colour: white button with the colour as text, or translucent on red/dark */
+section.band .link-arrow { background: #fff; color: var(--belt-blue); }
+section.band .link-arrow:hover { background: rgba(255, 255, 255, 0.9); color: var(--belt-blue); }
+section.band .link-arrow::after { background: rgba(37, 99, 201, 0.1); }
+section.dark .link-arrow { background: rgba(255, 255, 255, 0.16); color: #fff; }
+section.dark .link-arrow:hover { background: rgba(255, 255, 255, 0.26); color: #fff; }
+section.dark .link-arrow::after { background: rgba(255, 255, 255, 0.14); }
+/* A row of them */
+.link-row { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin: 2.5rem 0 0; }
+.link-row.left { justify-content: flex-start; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
 
 /* Header / nav — a floating pill, centred, over the page. The header itself
    is transparent and lets clicks through; only the pill is interactive. */
@@ -121,7 +142,28 @@ section.dark .link-arrow::after { color: var(--gold); }
   background: rgba(255, 255, 255, 0.42);
   -webkit-backdrop-filter: blur(12px) brightness(0.98) saturate(1.4);
   backdrop-filter: blur(12px) brightness(0.98) saturate(1.4);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  /* Rim, a faint inner depth at the bottom edge, then a soft lift off the
+     page: a tight contact shadow plus a wide, low-opacity ambient one. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -6px 12px -8px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 10px 30px -10px rgba(0, 0, 0, 0.16);
+}
+/* Specular edge: a 1px gradient ring, bright where light would catch the
+   top-left and bottom-right of the glass, nearly clear along the sides. */
+.site-header .wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.25) 35%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 .brand { display: flex; align-items: center; gap: 0.55rem; color: var(--black); text-decoration: none; font-weight: 600; font-size: 0.95rem; letter-spacing: -0.01em; white-space: nowrap; }
 .brand img { width: 30px; height: 30px; }
@@ -230,8 +272,8 @@ section.dark .link-arrow::after { color: var(--gold); }
 
 /* Sections — no dividers. Rhythm comes from whitespace, and from the
    alternating inset panels (.alt) that sit a gutter in from the viewport. */
-section { padding: clamp(4rem, 8vw, 7rem) 0; }
-section.alt, section.dark, .callout-section.red {
+section { padding: clamp(5rem, 8.5vw, 8rem) 0; }
+section.alt, section.dark, .callout-section:is(.red, .green, .orange, .black) {
   margin: var(--gutter);
   border-radius: var(--radius-lg);
 }
@@ -282,6 +324,266 @@ section.alt .card { background: var(--bg); }
 .card .rank { color: var(--red); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
 .card p:last-child { margin-bottom: 0; }
 
+/* Bento — a 6-column grid of tiles in mixed sizes. Tiles are flat: a tone
+   step (gray on white, white on a gray panel) or a solid belt colour. */
+.bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+.tile {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  background: var(--panel);
+  border-radius: 24px;
+  padding: clamp(1.4rem, 2.6vw, 2.1rem);
+}
+section.alt .tile { background: var(--bg); }
+.tile > * { margin: 0; }
+.tile h2 { font-size: clamp(2rem, 3.6vw, 2.9rem); line-height: 0.98; letter-spacing: -0.04em; text-wrap: balance; }
+.tile h3 { font-size: 1.2rem; letter-spacing: -0.02em; }
+.tile p { color: var(--ink); text-wrap: pretty; }
+.tile .push { margin-top: auto; } /* pins a link or button to the tile's bottom edge */
+.tile.span-3 { grid-column: span 3; }
+.tile.span-4 { grid-column: span 4; }
+.tile.span-6 { grid-column: span 6; }
+.tile.row-2 { grid-row: span 2; }
+
+/* Solid belt tiles */
+.tile.fill { color: #fff; }
+.tile.fill :is(h2, h3, p, strong) { color: inherit; }
+.tile.fill-yellow { background: var(--belt-yellow); color: var(--black); }
+.tile.fill-orange { background: var(--belt-orange); }
+.tile.fill-green  { background: var(--belt-green); }
+.tile.fill-blue   { background: var(--belt-blue); }
+.tile.fill-black  { background: var(--black); }
+.tile.fill-red    { background: var(--red); }
+
+/* Split section — a left-aligned title beside its content */
+.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+.split .section-title { margin: 0; }
+.split .section-title h2 { font-size: clamp(2.3rem, 4.6vw, 3.6rem); }
+.split .link-row { justify-content: flex-start; margin-top: 1.5rem; }
+
+/* ---------- Cards ----------
+   A white card on a soft, wide shadow. .shell is the card's outer box (kept
+   so photos and cards share markup); .core is the card face. Photos never
+   get a shadow — they stay flat. */
+:root { --soft-shadow: 0 1px 2px rgba(20, 24, 32, 0.04), 0 14px 36px -14px rgba(20, 24, 32, 0.14); }
+.shell { --r: 26px; --pad: 0px; border-radius: var(--r); min-width: 0; }
+.core {
+  height: 100%;
+  margin: 0;
+  border-radius: var(--r, 26px);
+  background: #fff;
+  box-shadow: var(--soft-shadow);
+  padding: clamp(1.5rem, 2.8vw, 2.4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.core > * { margin: 0; }
+.core .push { margin-top: auto; padding-top: 1rem; }
+.ph.core, img.photo, .map-embed.core { box-shadow: none; }
+
+/* A lede: the one sentence under a headline, in full ink */
+.lede { font-size: clamp(1.05rem, 1.4vw, 1.2rem); line-height: 1.5; color: var(--ink); max-width: 46ch; text-wrap: pretty; }
+
+/* 12-column grid; spans collapse to full width on tablets and phones */
+.grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1rem; }
+.span-5 { grid-column: span 5; }
+.span-7 { grid-column: span 7; }
+.span-12 { grid-column: 1 / -1; }
+.row-3 { grid-row: span 3; }
+
+/* Headline left, lede right, on one baseline */
+.head-split { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 1.5rem clamp(2rem, 6vw, 5rem); align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.head-split h2, #contact .section-title h2 {
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  margin: 0;
+  text-wrap: balance;
+}
+/* Headlines that share their row with something else run a step smaller */
+.core-lead h2, .band-split h2, .faq-split h2 {
+  font-size: clamp(2.2rem, 3.6vw, 3.3rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  margin: 0;
+  text-wrap: balance;
+}
+.head-split .lede { justify-self: end; }
+
+/* Start section */
+.core-lead { gap: 1.25rem; }
+.core-lead h2 { max-width: 14ch; }
+.core-lead .lede { margin-top: -0.25rem; }
+/* Start card — one wide card: the pitch on the left, a tinted panel on the
+   right holding the week strip (like a product shot of the schedule). */
+.start-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: stretch; padding: clamp(1.5rem, 3vw, 2.75rem); }
+.start-copy { display: flex; flex-direction: column; gap: 1.25rem; padding: clamp(0.5rem, 1.5vw, 1.25rem) 0; }
+.start-copy h2 { font-size: clamp(2.2rem, 3.6vw, 3.2rem); line-height: 0.95; letter-spacing: -0.045em; margin: 0; max-width: 15ch; text-wrap: balance; }
+.start-copy .lede { margin: 0; }
+.week-panel { display: grid; align-items: center; }
+/* The week sits straight on the card as a light inset — no extra panel, no shadow */
+.week-card { width: 100%; background: #f7f8fa; border-radius: 20px; padding: clamp(1.25rem, 2.4vw, 1.75rem); }
+.week { list-style: none; margin: 0 0 1.5rem; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.35rem; }
+.day { display: grid; justify-items: center; gap: 0.2rem; padding: 0.6rem 0 0.55rem; border-radius: 12px; background: #f4f6fa; }
+.day-name { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.day-note { font-size: 0.72rem; font-weight: 600; min-height: 1em; font-variant-numeric: tabular-nums; }
+.day.class { background: var(--belt-blue); }
+.day.class .day-name, .day.class .day-note { color: #fff; }
+.day.appt { background: #dfe8f8; }
+.day.appt .day-name, .day.appt .day-note { color: var(--belt-blue-deep); }
+.day.off { background: #eef0f3; }
+.day.off .day-name { color: #a9adb5; font-weight: 500; }
+/* Legend: each session stacked — day, then the time large, then who it's for */
+.week-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+.week-legend li { display: grid; gap: 0.2rem; align-content: start; }
+.week-legend strong { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 600; color: var(--black); white-space: nowrap; }
+.week-legend .key { flex: 0 0 auto; width: 0.7rem; height: 0.7rem; border-radius: 3px; background: var(--belt-blue); }
+.week-legend li.appt .key { background: #c9d8f2; }
+.week-legend .when { font-size: clamp(1.4rem, 2.2vw, 1.75rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; color: var(--black); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.week-legend li.appt .when { color: var(--ink); }
+.week-legend .who { font-size: 0.95rem; color: var(--muted); }
+.week-legend li.class .who { color: var(--ink); }
+
+.card-title { font-size: 1.25rem; letter-spacing: -0.02em; }
+.span-6 { grid-column: span 6; }
+/* Location card: the map fills the top, name and directions below */
+.place-card { gap: 1.1rem; padding: 0.6rem 0.6rem clamp(1.2rem, 2.2vw, 1.6rem); }
+.place-map { display: block; width: 100%; flex: 1 1 auto; min-height: 220px; border: 0; border-radius: 20px; background: var(--panel-deep); }
+.place-info { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem 1.5rem; flex-wrap: wrap; padding: 0 clamp(0.9rem, 1.8vw, 1.3rem); }
+.place-info h3 { margin: 0 0 0.3rem; }
+.place-info p { margin: 0; color: var(--ink); line-height: 1.5; max-width: 34ch; }
+
+/* Start card steps — light sub-cards. The number gets its own section on
+   the left (a slightly deeper tone), centred top to bottom; the text sits
+   to its right. No colour: the tone step does the work. */
+.start-list { list-style: none; margin: 0.25rem 0 0; padding: 0; display: grid; gap: 0.5rem; counter-reset: start; }
+.start-list li { counter-increment: start; display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); overflow: hidden; border-radius: 16px; background: #f8f8f9; font-size: 1rem; line-height: 1.5; color: var(--ink); }
+.start-list li::before {
+  content: counter(start);
+  align-self: stretch;
+  display: grid; place-items: center;
+  background: #f0f0f2;
+  font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums;
+  color: var(--black);
+}
+.start-list li > span { padding: 1rem 1.2rem; }
+.start-list strong { display: block; color: var(--black); font-weight: 600; }
+
+/* What we teach — three equal columns: photo in a tray, belt bar, text */
+.belt-path { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); }
+.belt-path h3 { font-size: 1.25rem; letter-spacing: -0.02em; margin: 0 0 0.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
+.belt-path h3::before { content: ""; display: block; width: 3rem; height: 6px; border-radius: 999px; background: var(--c); margin-top: 1.4rem; }
+.belt-path p { margin: 0; text-wrap: pretty; max-width: 40ch; }
+
+/* Photo placeholders — flat blocks captioned with the shot that belongs
+   there. Swap each for <img class="core photo"> in the same tray. */
+.ph { position: relative; aspect-ratio: var(--ar, 4 / 3); height: auto; background: var(--panel-deep); justify-content: flex-end; padding: 1.1rem 1.2rem; }
+.ph.portrait { --ar: 4 / 5; height: 100%; }
+.ph figcaption { font-size: 0.85rem; line-height: 1.35; color: var(--muted); max-width: 32ch; }
+.ph figcaption::before { content: "Placeholder · "; font-weight: 600; color: var(--ink); }
+.ph.on-colour { background: rgba(255, 255, 255, 0.1); box-shadow: none; }
+.ph.on-colour figcaption, .ph.on-colour figcaption::before { color: rgba(255, 255, 255, 0.85); }
+img.photo { display: block; width: 100%; aspect-ratio: var(--ar, 4 / 3); object-fit: cover; padding: 0; }
+
+/* Blue band */
+.band-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+.band-split h2 { margin-bottom: 1.4rem; }
+.band-split p { max-width: 44ch; font-size: 1.1rem; margin-bottom: 2rem; }
+
+/* Teachers */
+/* Instructors — two portraits with captions under them, and a gray panel for
+   the senpai. Rank is shown as a short belt swatch, not a badge. */
+.faculty { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); align-items: stretch; }
+.mentor { display: flex; flex-direction: column; min-width: 0; }
+.mentor .ph { height: auto; border-radius: 26px; margin: 0 0 1.25rem; display: flex; flex-direction: column; }
+.mentor h3 { font-size: 1.45rem; letter-spacing: -0.03em; margin: 0 0 0.5rem; }
+.mentor > p { margin: 0; max-width: 36ch; text-wrap: pretty; color: var(--ink); }
+.mentor-meta { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.6rem; }
+.rank { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.obi { flex: none; display: inline-block; width: 2.25rem; height: 6px; border-radius: 999px; background: var(--black); }
+/* 6th dan wears the red-and-white kōhaku belt */
+.obi-kohaku { background: repeating-linear-gradient(90deg, var(--red) 0 0.75rem, #fff 0.75rem 1.5rem); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18); }
+.senpai-panel { background: var(--panel); border-radius: 26px; padding: clamp(1.5rem, 2.6vw, 2.25rem); display: flex; flex-direction: column; gap: 0.75rem; }
+.senpai-panel h3 { font-size: 1.45rem; letter-spacing: -0.03em; margin: 0; }
+.senpai-panel > p { margin: 0; color: var(--muted); max-width: 30ch; text-wrap: pretty; }
+.senpai-list { list-style: none; margin: 1rem 0 0; padding: 0; }
+.senpai-list li { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 0; font-weight: 600; color: var(--black); }
+.senpai-list li + li { box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.07); }
+.senpai-list small { margin-left: auto; font-weight: 400; font-size: 0.85rem; }
+.senpai-panel .link-arrow { margin-top: auto; align-self: flex-start; background: var(--bg); }
+.senpai-panel .link-arrow:hover { background: #fafafa; }
+@media (max-width: 900px) {
+  .faculty { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .senpai-panel { grid-column: 1 / -1; }
+  .senpai-panel .link-arrow { margin-top: 1rem; }
+}
+@media (max-width: 600px) {
+  .faculty { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+.recognized-shell { margin-top: clamp(3rem, 6vw, 5rem); }
+.recognized { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem 3rem; }
+.recognized p { max-width: 48ch; }
+.recognized strong { color: var(--black); font-weight: 600; }
+.affil-logos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2.25rem; }
+.affil-logos img { max-height: 42px; max-width: 120px; width: auto; display: block; }
+
+/* FAQ — title left, questions right */
+.faq-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 2rem clamp(2rem, 6vw, 5rem); align-items: start; }
+.faq-split .section-title { margin: 0; display: grid; gap: 1.25rem; }
+.faq-split .section-title p { margin: 0; }
+.faq-split .faq-list { max-width: none; }
+.faq-item summary { transition: color 0.4s var(--spring); }
+.faq-item summary::after { transition: transform 0.5s var(--spring); }
+.faq-item[open] summary::after { content: "+"; transform: rotate(45deg); }
+
+/* Contact */
+#contact .section-title { display: grid; gap: 1.25rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+#contact .section-title p { margin: 0; }
+#contact .contact-grid { gap: 1rem; }
+#contact .map-embed { padding: 0; min-height: 420px; border-radius: var(--r); }
+.contact-note { font-size: 0.9rem; margin: 0; }
+
+/* Scroll reveal — heavy fade-up with a blur that resolves. Hidden state only
+   applies once main.js has confirmed IntersectionObserver and motion are OK. */
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(40px);
+  filter: blur(8px);
+  transition: opacity 0.9s var(--spring), transform 0.9s var(--spring), filter 0.9s var(--spring);
+  transition-delay: var(--d, 0ms);
+}
+.reveal-on [data-reveal].is-in { opacity: 1; transform: none; filter: none; }
+
+@media (max-width: 900px) {
+  .grid-12 > * { grid-column: 1 / -1; }
+  .row-3 { grid-row: auto; }
+  .ph.portrait { height: auto; }
+  .steps-row, .belt-path, .head-split, .band-split, .faq-split, .start-card { grid-template-columns: 1fr; }
+  .head-split .lede { justify-self: start; }
+}
+/* Belt band — a full colour panel, laid out left-aligned in two columns so it
+   reads as a different kind of block from the centred red call to action. */
+section.band { margin: var(--gutter); border-radius: var(--radius-lg); color: #fff; }
+section.band.blue { background: var(--belt-blue); }
+section.band :is(h2, h3, p, strong) { color: #fff; }
+section.band p { color: rgba(255, 255, 255, 0.86); }
+
+@media (max-width: 860px) {
+  .bento { grid-template-columns: repeat(2, 1fr); }
+  .tile, .tile.span-3 { grid-column: span 1; }
+  .tile.span-4, .tile.span-6 { grid-column: span 2; }
+  .tile.row-2 { grid-row: auto; }
+  .split { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .bento { grid-template-columns: 1fr; }
+  .tile, .tile.span-3, .tile.span-4, .tile.span-6 { grid-column: auto; }
+}
+
 /* Callouts — inline, inside prose */
 .callout { border-left: 3px solid var(--red); padding: 0.25rem 0 0.25rem 1rem; margin: 1.5rem 0; color: var(--ink); }
 .callout p:last-child { margin-bottom: 0; }
@@ -298,28 +600,35 @@ section.alt .card { background: var(--bg); }
   text-wrap: balance;
 }
 .callout-section p { font-size: clamp(1.02rem, 1.5vw, 1.2rem); color: var(--muted); max-width: 620px; margin: 0 auto 1em; text-wrap: pretty; }
-.callout-section p.eyebrow { color: var(--red); font-size: 0.72rem; }
 .callout-section p:last-child { margin-bottom: 0; }
 .callout-section .actions { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-top: 2rem; }
 
-/* Red variant — the one place the brand red fills a whole block */
-.callout-section.red { background: var(--red); color: #fff; }
-.callout-section.red h2 { color: #fff; }
-.callout-section.red p { color: rgba(255,255,255,0.86); }
-.callout-section.red a:not(.btn) { color: #fff; }
-.callout-section.red .eyebrow { color: rgba(255,255,255,0.75); }
-.callout-section.red .btn { background: #fff; border-color: #fff; color: var(--red); }
-.callout-section.red .btn:hover { background: var(--black); border-color: var(--black); color: #fff; }
-.callout-section.red .btn.btn-outline { background: transparent; color: #fff; border-color: rgba(255,255,255,0.5); }
-.callout-section.red .btn.btn-outline:hover { background: #fff; color: var(--red); border-color: #fff; }
+/* Colour variants — each page's call to action takes its own colour: red on
+   the home page, a belt colour elsewhere (black on Instructors, for the black
+   belts who teach). */
+.callout-section:is(.red, .green, .orange, .black) { background: var(--fill); color: #fff; }
+.callout-section.red    { --fill: var(--red); }
+.callout-section.green  { --fill: var(--belt-green); }
+.callout-section.orange { --fill: var(--belt-orange); }
+.callout-section.black  { --fill: var(--black); }
+.callout-section:is(.red, .green, .orange, .black) h2 { color: #fff; }
+.callout-section:is(.red, .green, .orange, .black) p { color: rgba(255,255,255,0.86); }
+.callout-section:is(.red, .green, .orange, .black) a:not(.btn) { color: #fff; }
+.callout-section:is(.red, .green, .orange, .black) .btn { background: #fff; color: var(--fill); }
+.callout-section:is(.red, .green, .orange, .black) .btn:hover { background: rgba(255,255,255,0.9); color: var(--fill); }
+.callout-section:is(.red, .green, .orange, .black) .btn::after { background: rgba(0,0,0,0.06); }
+.callout-section:is(.red, .green, .orange, .black) .btn.btn-outline { background: rgba(255,255,255,0.16); color: #fff; }
+.callout-section:is(.red, .green, .orange, .black) .btn.btn-outline:hover { background: rgba(255,255,255,0.26); color: #fff; }
+.callout-section:is(.red, .green, .orange, .black) .link-arrow { background: rgba(255,255,255,0.16); color: #fff; }
+.callout-section:is(.red, .green, .orange, .black) .link-arrow:hover { background: rgba(255,255,255,0.26); color: #fff; }
 
 /* Dark variant (rides on section.dark) */
-.callout-section.dark .eyebrow { color: var(--gold); }
 .callout-section.dark p { color: #b4b4b4; }
-.callout-section.dark .btn { background: #fff; border-color: #fff; color: var(--black); }
-.callout-section.dark .btn:hover { background: var(--panel); border-color: var(--panel); }
-.callout-section.dark .btn.btn-outline { background: transparent; color: #fff; border-color: rgba(255,255,255,0.4); }
-.callout-section.dark .btn.btn-outline:hover { background: #fff; color: var(--black); border-color: #fff; }
+.callout-section.dark .btn { background: #fff; color: var(--black); }
+.callout-section.dark .btn:hover { background: var(--panel); color: var(--black); }
+.callout-section.dark .btn::after { background: rgba(0,0,0,0.06); }
+.callout-section.dark .btn.btn-outline { background: rgba(255,255,255,0.16); color: #fff; }
+.callout-section.dark .btn.btn-outline:hover { background: rgba(255,255,255,0.26); color: #fff; }
 
 /* Schedule table — a soft block, rows separated by the page tone */
 .table-wrap { overflow-x: auto; }
@@ -361,8 +670,8 @@ blockquote.quote-lead cite {
 }
 .callout-section.dark blockquote.quote-lead { color: #fff; }
 .callout-section.dark blockquote.quote-lead cite { color: var(--gold); }
-.callout-section.red blockquote.quote-lead { color: #fff; }
-.callout-section.red blockquote.quote-lead cite { color: rgba(255,255,255,0.75); }
+.callout-section:is(.red, .green, .orange, .black) blockquote.quote-lead { color: #fff; }
+.callout-section:is(.red, .green, .orange, .black) blockquote.quote-lead cite { color: rgba(255,255,255,0.75); }
 
 /* Affiliations */
 .affil-strip { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; }
@@ -482,7 +791,184 @@ section.dark .contact-list li span:first-child { color: var(--gold); }
 .person p:last-child { margin-bottom: 0; }
 .belt { display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 999px; line-height: 1.4; vertical-align: middle; }
 .belt-rokudan { background: #fff; color: var(--red); border: 1px solid var(--red); }
-.belt-yondan { background: var(--black); color: #fff; border: 1px solid var(--black); box-shadow: inset 0 -3px 0 var(--red); }
+.belt-godan { background: var(--black); color: #fff; border: 1px solid var(--black); box-shadow: inset 0 -3px 0 var(--red); }
 .belt-shodan { background: var(--black); color: #fff; border: 1px solid var(--black); }
 .senpai { list-style: none; padding: 0; margin: 0; }
 .senpai li { padding: 0.55rem 0; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 0.6rem; font-weight: 600; }
+
+/* ==========================================================================
+   Interior pages — the home page's system carried through: white cards on a
+   soft shadow, head-split headlines, belt-colour markers, one colour band per
+   page, and colour blocks that never touch.
+   ========================================================================== */
+
+/* Belt colour handles for --c (cards, bars, swatches) */
+.c-white  { --c: #fff; }
+.c-yellow { --c: var(--belt-yellow); }
+.c-orange { --c: var(--belt-orange); }
+.c-green  { --c: var(--belt-green); }
+.c-blue   { --c: var(--belt-blue); }
+.c-purple { --c: var(--belt-purple); }
+.c-brown  { --c: var(--belt-brown); }
+.c-black  { --c: var(--black); }
+.c-red    { --c: var(--red); }
+
+/* Page head: one lede under the headline, nothing else */
+.page-head .jp { display: block; margin: 0 auto 1.1rem; font-size: clamp(1rem, 1.4vw, 1.15rem); font-weight: 500; letter-spacing: 0.3em; color: var(--muted); }
+
+/* Card grids. Equal columns, every card the same weight. */
+.cards { display: grid; gap: clamp(1rem, 2vw, 1.5rem); grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); }
+.cards.two  { --cols: 2; }
+.cards.four { --cols: 4; }
+@media (max-width: 900px) { .cards, .cards.four { --cols: 2; } }
+@media (max-width: 600px) { .cards, .cards.two, .cards.four { --cols: 1; } }
+
+/* A card that wears its belt: a short bar at the top in --c */
+.core.belted::before { content: ""; display: block; width: 3rem; height: 6px; border-radius: 999px; background: var(--c); margin-bottom: 0.4rem; }
+.core.belted.c-white::before { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16); }
+.core h3 { font-size: 1.25rem; letter-spacing: -0.02em; line-height: 1.2; }
+.core p { text-wrap: pretty; }
+.core .jp-term { color: var(--muted); font-weight: 500; }
+.core .sub { color: var(--muted); font-size: 0.95rem; margin-top: -0.4rem; }
+section.alt .core.flat { box-shadow: none; }
+
+/* Inline note — replaces the old left-border callout: a quiet tone step */
+.callout { border: 0; background: var(--panel); border-radius: 20px; padding: 1.2rem 1.4rem; margin: 1.5rem 0; }
+section.alt .callout { background: var(--bg); }
+.core .callout { margin: 0; background: var(--panel); }
+
+/* Note row — a wide card: one statement on the left, its link on the right */
+.note-row { margin-top: clamp(2rem, 4vw, 3rem); }
+.note-row .core { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 3rem; }
+.note-row p { max-width: 60ch; }
+.note-row strong { color: var(--black); font-weight: 600; }
+.fine { color: var(--muted); font-size: 0.9rem; max-width: 70ch; margin: 1.5rem 0 0; text-wrap: pretty; }
+
+/* Facts: label / value rows inside a card */
+.facts { margin: 0; display: grid; }
+.facts > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; padding: 0.85rem 0; }
+.facts > div + div { box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.07); }
+.facts dt { color: var(--muted); font-size: 0.95rem; }
+.facts dd { margin: 0; color: var(--black); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* Bullet list with belt-colour dots instead of bullets */
+.dot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+.dot-list li { display: grid; grid-template-columns: 0.7rem minmax(0, 1fr); gap: 0.9rem; align-items: baseline; text-wrap: pretty; }
+.dot-list li::before { content: ""; width: 0.7rem; height: 0.7rem; border-radius: 3px; background: var(--c, var(--black)); transform: translateY(0.05rem); }
+.dot-list strong { color: var(--black); font-weight: 600; }
+
+/* Photo placeholder that fills its half of a split card */
+.start-card > .ph { margin: 0; border-radius: 20px; height: 100%; min-height: 280px; }
+
+/* Belt ladder — stages of rank on a colour band, one translucent row each */
+.ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.ladder li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.6rem; align-items: start; padding: 1.2rem 1.4rem; border-radius: 18px; background: rgba(255, 255, 255, 0.1); }
+.ladder .stage { display: flex; align-items: center; gap: 0.8rem; color: #fff; font-weight: 600; font-size: 1.05rem; letter-spacing: -0.01em; }
+.ladder p { margin: 0; color: rgba(255, 255, 255, 0.88); font-size: 1rem; max-width: none; }
+.obis { display: flex; gap: 0.3rem; }
+.obis .obi { width: 1.6rem; background: var(--c); }
+.obis .obi.c-white { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18); }
+.obis.solo .obi { width: 2.6rem; }
+
+
+/* Belt rail — every belt in order, as one long row of swatches */
+.belt-rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0.4rem; margin: 0 0 0.9rem; padding: 0; list-style: none; }
+.belt-rail li { height: 14px; border-radius: 999px; background: var(--c); }
+.belt-rail li.c-white { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16); }
+.belt-rail li.kohaku { background: repeating-linear-gradient(90deg, var(--red) 0 0.9rem, #fff 0.9rem 1.8rem); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16); }
+.rail-key { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); font-size: 0.9rem; margin: 0; }
+
+/* Timeline — years set large in tabular figures */
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(1rem, 2vw, 1.5rem); grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.timeline .year { font-size: clamp(2.2rem, 3.6vw, 3rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1; color: var(--black); font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) { .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .timeline { grid-template-columns: 1fr; } }
+
+/* Translucent cards on a colour band */
+.band .core { background: rgba(255, 255, 255, 0.12); box-shadow: none; }
+.band .core :is(h3, p, strong) { color: #fff; }
+.band .core .jp-term { color: rgba(255, 255, 255, 0.72); }
+.band .head-split .lede { color: rgba(255, 255, 255, 0.88); }
+section.band.green  { background: var(--belt-green); }
+section.band.purple { background: var(--belt-purple); }
+section.band.green .link-arrow { color: var(--belt-green); }
+section.band.green .link-arrow::after { background: rgba(38, 122, 75, 0.12); }
+
+/* Instructor profiles — portrait left, the story right */
+.profile .core { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: start; gap: clamp(1.5rem, 4vw, 3.5rem); padding: clamp(0.6rem, 1vw, 0.75rem); }
+.profile + .profile { margin-top: clamp(1rem, 2vw, 1.5rem); }
+.profile .ph { --ar: 1 / 1; border-radius: 20px; height: auto; margin: 0; }
+.profile-body { display: flex; flex-direction: column; gap: 1rem; padding: clamp(1rem, 3vw, 2.25rem) clamp(1rem, 3vw, 2.25rem) clamp(1rem, 3vw, 2.25rem) 0; }
+.profile-body > * { margin: 0; }
+.profile-body h2 { font-size: clamp(2rem, 3.4vw, 2.9rem); line-height: 0.98; letter-spacing: -0.045em; }
+.profile-body p { max-width: 58ch; }
+.dan-list { list-style: none; margin: 0.25rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.4rem; }
+.dan-list li { background: var(--panel); border-radius: 12px; padding: 0.7rem 0.8rem; display: grid; gap: 0.15rem; }
+.dan-list strong { font-size: 1.05rem; color: var(--black); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.dan-list span { font-size: 0.85rem; color: var(--muted); }
+@media (max-width: 860px) {
+  .profile .core { grid-template-columns: 1fr; }
+  .profile-body { padding: 0.5rem 1rem 1.25rem; }
+  .dan-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Senpai cards — smaller portrait, name, belt */
+.senpai-card .ph { border-radius: 18px; margin-bottom: 0.4rem; }
+.senpai-card.core { padding: 0.6rem 0.6rem 1.4rem; }
+.senpai-card > :not(.ph) { padding: 0 0.9rem; }
+.senpai-card h3 { margin-top: 0.4rem; }
+
+/* Colour variants for page CTAs */
+.callout-section:is(.brown, .purple) { margin: var(--gutter); border-radius: var(--radius-lg); background: var(--fill); color: #fff; }
+.callout-section.brown  { --fill: var(--belt-brown); }
+.callout-section.purple { --fill: var(--belt-purple); }
+.callout-section:is(.brown, .purple) h2 { color: #fff; }
+.callout-section:is(.brown, .purple) p { color: rgba(255, 255, 255, 0.86); }
+.callout-section:is(.brown, .purple) .btn { background: #fff; color: var(--fill); }
+.callout-section:is(.brown, .purple) .btn:hover { background: rgba(255, 255, 255, 0.9); color: var(--fill); }
+.callout-section:is(.brown, .purple) .btn::after { background: rgba(0, 0, 0, 0.06); }
+.callout-section:is(.brown, .purple) .btn.btn-outline { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.callout-section:is(.brown, .purple) .btn.btn-outline:hover { background: rgba(255, 255, 255, 0.26); color: #fff; }
+.callout-section:is(.brown, .purple) blockquote.quote-lead { color: #fff; }
+blockquote.quote-lead cite { text-transform: none; letter-spacing: -0.01em; font-size: 0.95rem; }
+.callout-section:is(.brown, .purple) blockquote.quote-lead cite { color: rgba(255, 255, 255, 0.75); }
+
+/* Full FAQ page: one centred column */
+#faq[data-notitle] .faq-list { margin: 0 auto; }
+#faq[data-notitle] { padding-top: clamp(1rem, 3vw, 2rem); }
+
+/* Affiliation cards and the CENCO block (rendered by js/main.js) */
+.affil-card .affil-logo-box { margin-bottom: 0.25rem; }
+.board-list li { border-top-color: rgba(0, 0, 0, 0.07); }
+
+/* Legal pages: a sticky table of contents beside the text */
+.legal-layout { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+.legal-layout .legal { max-width: 68ch; }
+.toc { position: sticky; top: 96px; font-size: 0.9rem; }
+.toc p { margin: 0 0 0.75rem; font-weight: 600; color: var(--black); }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.toc a { display: block; padding: 0.4rem 0.75rem; border-radius: 10px; color: var(--muted); text-decoration: none; transition: background 0.4s var(--spring), color 0.4s var(--spring); }
+.toc a:hover { background: var(--panel); color: var(--black); }
+.legal h2 { scroll-margin-top: 96px; }
+@media (max-width: 900px) {
+  .legal-layout { grid-template-columns: 1fr; }
+  .toc { position: static; }
+  .toc ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Small pieces used by single pages */
+.band-note { margin: clamp(2rem, 4vw, 3rem) 0 0; max-width: 62ch; font-size: 1.05rem; text-wrap: pretty; }
+/* Timeline stacked inside a split card (What is judo) */
+.timeline.stack { grid-template-columns: 1fr; gap: 0.5rem; background: #edf2fb; border-radius: 20px; padding: clamp(1rem, 2.5vw, 1.75rem); align-content: center; }
+.timeline.stack li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); align-items: center; gap: 1rem; background: #fff; border-radius: 16px; padding: 1rem 1.25rem; }
+.timeline.stack .year { font-size: clamp(1.6rem, 2.4vw, 2rem); color: var(--belt-blue-deep); }
+.timeline.stack p { margin: 0; }
+.visiting { background: var(--panel); box-shadow: none; }
+section.alt .visiting { background: transparent; padding-top: 1rem; }
+.senpai-card .mentor-meta { margin: -0.3rem 0 0; }
+.affil-card p { max-width: 62ch; }
+@media (max-width: 600px) {
+  .timeline.stack li { grid-template-columns: 4.5rem minmax(0, 1fr); padding: 0.9rem 1rem; }
+  .rail-key { flex-direction: column; gap: 0.25rem; }
+  .facts > div { grid-template-columns: 6rem minmax(0, 1fr); }
+}
